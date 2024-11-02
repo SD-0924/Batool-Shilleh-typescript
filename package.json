@@ -5,7 +5,7 @@
   "description": "",
   "main": "server.ts",
   "scripts": {
-    "test": "jest",
+    "test": "jest --config jest.config.ts",
     "start": "ts-node src/server.ts",
     "dev": "ts-node-dev src/server.ts",
     "build": "tsc"
