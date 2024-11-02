@@ -1,21 +1,45 @@
-# .github/workflows/nodejs.yml
-name: Node.js CI
+name: Run Unit Tests
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
     steps:
-    - uses: actions/checkout@v2
-    
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '20.3.0'  
-    
-    - run: npm install  
-    - run: npm test     
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      
+      - name: Install dependencies
+        run: |
+          npm install --include=optional sharp
+          npm install  # Or you can use npm ci if your lock file is up to date
+      
+      - name: Create images directory
+        run: mkdir -p src/images
+      
+      - name: Run Unit Tests
+        run: npm test
+      
+      - name: Upload coverage reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report-node-${{ matrix.node-version }}
+          path: coverage/
+          retention-days: 30
+        if: always()
