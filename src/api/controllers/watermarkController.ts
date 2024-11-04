@@ -1,23 +1,15 @@
-import { Request, Response, NextFunction } from 'express'
-import sharp from 'sharp'
-import fs from 'fs'
-import path from 'path'
-import { ErrorMessages } from '../../utils/constants'
-
-const uploadDir = path.join(__dirname, '../../uploads');
-
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir)
-}
+import { Request, Response, NextFunction } from 'express';
+import sharp from 'sharp';
+import { v2 as cloudinary } from 'cloudinary';
+import { ErrorMessages } from '../../utils/constants';
 
 export const addWatermark = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     if (!req.file) {
-      return next(new Error(ErrorMessages.NO_FILE_UPLOADED))
-      return 
+      return next(new Error(ErrorMessages.NO_FILE_UPLOADED));
     }
 
-    const watermark = req.body.watermark 
+    const watermark = req.body.watermark;
 
     const processedImage = await sharp(req.file.buffer)
       .composite([{
@@ -30,13 +22,13 @@ export const addWatermark = async (req: Request, res: Response, next: NextFuncti
       }])
       .toBuffer();
 
-    const fileName = `watermarked_${Date.now()}.jpg`
-    const filePath = path.join(uploadDir, fileName)
+    const result = await cloudinary.uploader.upload(`data:image/jpeg;base64,${processedImage.toString('base64')}`, {
+      folder: 'uploads',
+    });
 
-    await sharp(processedImage).toFile(filePath)
-
-    res.status(200).json({ message: 'Watermarked image created!', path: filePath })
+    res.status(200).json({ message: 'Watermarked image created and uploaded!', url: result.secure_url });
   } catch (error) {
-    next(error)
+    console.error('Error in addWatermark:', error);
+    next(error);
   }
-}
+};
