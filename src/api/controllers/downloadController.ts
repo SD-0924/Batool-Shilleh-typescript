@@ -1,15 +1,18 @@
 import { Request, Response, NextFunction } from 'express';
-import path from 'path';
-import fs from 'fs';
-import { ErrorMessages } from '../../utils/constants'
+import { ErrorMessages } from '../../utils/constants';
+import { v2 as cloudinary } from 'cloudinary';
 
-export const downloadImage = (req: Request, res: Response, next: NextFunction): void => {
+export const downloadImage = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { filename } = req.params;
-  const filePath = path.join(__dirname, '../../uploads', filename)
 
-  if (fs.existsSync(filePath)) {
-    res.download(filePath)
-  } else {
-    return next(new Error(ErrorMessages.FILE_NOT_FOUND))
+  try {
+    const imageUrl = cloudinary.url(`uploads/${filename}`, {
+      secure: true,
+    });
+
+    res.redirect(imageUrl);
+  } catch (error) {
+    console.error('Error downloading from Cloudinary:', error);
+    return next(new Error(ErrorMessages.FILE_NOT_FOUND));
   }
 };
