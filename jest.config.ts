@@ -1,18 +1,11 @@
-import type { Config } from 'jest'
+import type { Config } from 'jest';
 
 const config: Config = {
-  preset: 'ts-jest/presets/default-esm',
-  testEnvironment: 'node',
-  extensionsToTreatAsEsm: ['.ts'],
+  testMatch: ['**/__tests__/**/*.+(ts|tsx|js)', '**/?(*.)+(spec|test).+(ts|tsx|js)'],
   transform: {
-      '^.+\\.ts$': 'ts-jest',
+    '^.+\\.ts$': 'ts-jest',
   },
-  testMatch: ['**/__tests__/**/?(*.)+(spec|test).ts'],
-  globals: {
-      'ts-jest': {
-          useESM: true,
-      },
-  },
-}
+  testPathIgnorePatterns: ['/node_modules/', '/dist/'], // adjust if necessary
+};
 
-export default config
+export default config;
