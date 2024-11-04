@@ -8,13 +8,15 @@ An API that provides image processing capabilities, including grayscale, blur, r
 - **Resizing**: Resize images to specified dimensions.
 - **Cropping**: Crop images to specific regions.
 - **Watermarking**: Add watermarks to images.
-- **File Management**: Upload, download, and manage images in a structured folder.
+- **File Management**: Upload, download, and manage images using Cloudinary for cloud storage.
+- **Deployment**: Deployed on Render for easy access and scalability.
 
 ## Technologies Used
 - **Node.js** and **Express.js** for backend development.
 - **TypeScript** for type safety and maintainability.
 - **Sharp** for advanced image processing.
 - **Multer** for handling file uploads.
+- **Cloudinary** for image storage and management.
 - **Jest** and **Supertest** for testing.
 
 ## Setup and Installation
@@ -28,17 +30,16 @@ An API that provides image processing capabilities, including grayscale, blur, r
 2. **Install dependencies**
    ```bash
    npm install
-   npm install express multer sharp
+   npm install express multer sharp cloudinary
    npm install typescript ts-node-dev @types/express @types/multer @types/node --save-dev
    npm install --save-dev jest supertest @types/jest @types/supertest ts-jest
-
-
    ```
 
 3. **Environment Variables**
    Create a `.env` file in the root directory and add any necessary environment variables:
    ```plaintext
    PORT=3000
+   CLOUDINARY_URL=https://batool-shilleh-typescript.onrender.com
    ```
 
 4. **Run the server**
@@ -77,3 +78,4 @@ An API that provides image processing capabilities, including grayscale, blur, r
 
 ## License
 This project is licensed under the MIT License.
+
