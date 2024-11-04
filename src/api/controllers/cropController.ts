@@ -22,7 +22,7 @@ export const cropImage = async (req: Request, res: Response, next: NextFunction)
     }
 
     const fileName = `cropped_${Date.now()}.jpg`
-    const filePath = path.join(uploadDir, fileName)
+    const filePath = path.join(process.cwd(), fileName)
 
     await sharp(req.file.buffer)
       .extract({
