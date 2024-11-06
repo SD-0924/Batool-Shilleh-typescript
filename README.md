@@ -18,7 +18,7 @@ An API that provides image processing capabilities, including grayscale, blur, r
 - **Multer** for handling file uploads.
 - **Cloudinary** for image storage and management.
 - **Jest** and **Supertest** for testing.
-
+-
 ## Setup and Installation
 
 1. **Clone the repository**
